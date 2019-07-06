@@ -5,18 +5,13 @@
 import util from 'tui-code-snippet';
 
 import LayerPopup from './layerpopup';
-import Tab from './tab';
 import i18n from '../i18n';
 
 const CLASS_IMAGE_URL_INPUT = 'te-image-url-input';
-const CLASS_IMAGE_FILE_INPUT = 'te-image-file-input';
 const CLASS_ALT_TEXT_INPUT = 'te-alt-text-input';
 const CLASS_OK_BUTTON = 'te-ok-button';
 const CLASS_CLOSE_BUTTON = 'te-close-button';
-const CLASS_FILE_TYPE = 'te-file-type';
 const CLASS_URL_TYPE = 'te-url-type';
-const CLASS_TAB_SECTION = 'te-tab-section';
-const TYPE_UI = 'ui';
 
 /**
  * Class PopupAddImage
@@ -31,15 +26,10 @@ class PopupAddImage extends LayerPopup {
    */
   constructor(options) {
     const POPUP_CONTENT = `
-            <div class="${CLASS_TAB_SECTION}"></div>
             <div class="${CLASS_URL_TYPE}">
                 <label for="">${i18n.get('Image URL')}</label>
                 <input type="text" class="${CLASS_IMAGE_URL_INPUT}" />
             </div>
-            <form enctype="multipart/form-data" class="${CLASS_FILE_TYPE}">
-                <label for="">${i18n.get('Select image file')}</label>
-                <input type="file" class="${CLASS_IMAGE_FILE_INPUT}" accept="image/*" />
-            </form>
             <label for="url">${i18n.get('Description')}</label>
             <input type="text" class="${CLASS_ALT_TEXT_INPUT}" />
             <div class="te-button-section">
@@ -82,24 +72,7 @@ class PopupAddImage extends LayerPopup {
     const $popup = this.$el;
 
     this._$imageUrlInput = $popup.find(`.${CLASS_IMAGE_URL_INPUT}`);
-    this._$imageFileInput = $popup.find(`.${CLASS_IMAGE_FILE_INPUT}`);
     this._$altTextInput = $popup.find(`.${CLASS_ALT_TEXT_INPUT}`);
-
-    const $fileTypeSection = $popup.find(`.${CLASS_FILE_TYPE}`);
-    const $urlTypeSection = $popup.find(`.${CLASS_URL_TYPE}`);
-    const $tabSection = this.$body.find(`.${CLASS_TAB_SECTION}`);
-    this.tab = new Tab({
-      initName: i18n.get('File'),
-      items: [
-        i18n.get('File'),
-        i18n.get('URL')
-      ],
-      sections: [
-        $fileTypeSection,
-        $urlTypeSection
-      ]
-    });
-    $tabSection.append(this.tab.$el);
   }
 
   /**
@@ -114,11 +87,6 @@ class PopupAddImage extends LayerPopup {
     this.on('shown', () => this._$imageUrlInput.focus());
     this.on('hidden', () => this._resetInputs());
 
-    this.on(`change .${CLASS_IMAGE_FILE_INPUT}`, () => {
-      const filename = this._$imageFileInput.val().split('\\').pop();
-      this._$altTextInput.val(filename);
-    });
-
     this.on(`click .${CLASS_CLOSE_BUTTON}`, () => this.hide());
     this.on(`click .${CLASS_OK_BUTTON}`, () => {
       const imageUrl = this._$imageUrlInput.val();
@@ -126,20 +94,10 @@ class PopupAddImage extends LayerPopup {
 
       if (imageUrl) {
         this._applyImage(imageUrl, altText);
-      } else {
-        const {files} = this._$imageFileInput.get(0);
-        if (files.length) {
-          const imageFile = files.item(0);
-          const hookCallback = (url, text) => this._applyImage(url, text || altText);
-
-          this.eventManager.emit('addImageBlobHook', imageFile, hookCallback, TYPE_UI);
-        }
       }
 
       this.hide();
     });
-
-    this.tab.on('itemClick', () => this._resetInputs());
   }
 
   /**
@@ -173,7 +131,6 @@ class PopupAddImage extends LayerPopup {
   }
 
   remove() {
-    this.tab.remove();
     super.remove();
   }
 }
