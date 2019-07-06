@@ -509,7 +509,7 @@
 }
 
 .te-popup-add-image .te-url-type {
-    display: none;
+    display: block;
 }
 
 .te-popup-add-image .te-file-type {
