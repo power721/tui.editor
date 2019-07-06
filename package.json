@@ -1,7 +1,7 @@
 {
-  "name": "tui-editor",
+  "name": "@har01d/tui-editor",
   "version": "1.4.3",
-  "description": "GFM  Markdown Wysiwyg Editor - Productive and Extensible",
+  "description": "GFM  Markdown Wysiwyg Editor - Productive and Extensible - Modified",
   "keywords": [
     "toast",
     "ui",
@@ -13,10 +13,10 @@
     "gfm",
     "jquery-plugin"
   ],
-  "homepage": "https://github.com/nhn/tui.editor",
-  "bugs": "https://github.com/nhn/tui.editor/issues",
+  "homepage": "https://github.com/power721/tui.editor",
+  "bugs": "https://github.com/power721/tui.editor/issues",
   "author": "NHN FE Development Lab <dl_javascript@nhn.com> (https://nhn.github.io/tui.editor/)",
-  "repository": "https://github.com/nhn/tui.editor.git",
+  "repository": "https://github.com/power721/tui.editor.git",
   "license": "MIT",
   "files": [
     "dist",
